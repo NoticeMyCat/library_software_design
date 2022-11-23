@@ -17,7 +17,7 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// order is important, start with most specific
-		http.csrf().and()
+		http.csrf().and().cors().and()
 		// JWT Authentication
 		.addFilterBefore(new JwtAuthenticationFilter(tokenService),
 				UsernamePasswordAuthenticationFilter.class)
