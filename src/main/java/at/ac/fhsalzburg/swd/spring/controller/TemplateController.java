@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -30,6 +32,9 @@ import at.ac.fhsalzburg.swd.spring.util.ObjectMapperUtils;
             // establish the routing table to know which methods serve which endpoints.
 public class TemplateController {
 
+	Logger logger = LoggerFactory.getLogger(TemplateController.class);
+
+	
     // Dependency Injection
     // ----------------------------------------------------------------------
 
@@ -71,6 +76,8 @@ public class TemplateController {
                          // https://springframework.guru/spring-requestmapping-annotation/#:~:text=%40RequestMapping%20is%20one%20of%20the,map%20Spring%20MVC%20controller%20methods.
     public String index(Model model, HttpSession session, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 
+    	logger.info("index called");
+    	
         if (session == null) {
             model.addAttribute("message", "no session");
         } else {
@@ -113,18 +120,20 @@ public class TemplateController {
     
     @RequestMapping(value = {"/login"})
     public String login(Model model) {
+    	logger.info("login called");
     	return "login";
     }
     
     @RequestMapping(value = {"/login-error"})
     public String loginError(Model model) {
+    	logger.info("loginError called");
     	model.addAttribute("error","Login error");
     	return "login";
     }
 
     @RequestMapping(value = {"/admin/addUser"}, method = RequestMethod.GET)
     public String showAddPersonPage(Model model, @RequestParam(value = "username", required = false) String username) {
-        
+    	logger.info("showAddPersonPage called");
     	User modUser = null;
     	UserDTO userDto = new UserDTO();
     	
@@ -155,7 +164,9 @@ public class TemplateController {
                                                                          // and then exposes it to a
                                                                          // web view:
     	
-        // merge instances
+    	logger.info("addUser called");
+    	
+    	// merge instances
         User user = ObjectMapperUtils.map(userDTO, User.class); 
     	
         // if user already existed in DB, new information is already merged and saved
